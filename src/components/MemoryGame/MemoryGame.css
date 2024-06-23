@@ -1,0 +1,8 @@
+.memory-game {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 20px;
+}
