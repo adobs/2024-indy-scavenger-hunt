@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { MemoryCard } from '../MemoryCard';
 import { equations, evaluateEquation } from '../utils';
 import './MemoryGame.css';
+import { HStack, SimpleGrid } from '@chakra-ui/react';
 
 interface CardState {
     id: number;
@@ -19,6 +20,7 @@ export const MemoryGame: React.FC = () => {
     const [cards, setCards] = useState<CardState[]>([]);
     const [flippedCards, setFlippedCards] = useState<number[]>([]);
     const [matchedCards, setMatchedCards] = useState<number[]>([]);
+    const timeouts: NodeJS.Timeout[] = Array.from({ length: equations.length }, () => setTimeout(() => {}, 0));
 
     useEffect(() => {
         const shuffledEquations = shuffleArray(equations);
@@ -32,24 +34,19 @@ export const MemoryGame: React.FC = () => {
     }, []);
 
     useEffect(() => {
-      console.log("in use effect matched card:", Array.from(matchedCards.values()))
-
-      setCards(prevCards => prevCards.map(card =>
+        setCards(prevCards => prevCards.map(card =>
         matchedCards.includes(card.id) ? { ...card, isMatched: true } : card
        ));
-
     }, [matchedCards])
 
     useEffect(() => {
-      console.log("in use effect flipped card:", Array.from(flippedCards.values()))
       setCards(prevCards => prevCards.map(card =>
         flippedCards.includes(card.id) ? { ...card, isFlipped: true } : {...card, isFlipped: false }
        ));
-
-
   } , [flippedCards]);
 
     const handleCardClick = (id: number) => {
+      console.log("id: ", id);
       if (!flippedCards.includes(id) && !matchedCards.includes(id)) { 
         if (flippedCards.length === 1 && evaluateEquation(cards[flippedCards[0]].equation) === evaluateEquation(cards[id].equation)) {
               setMatchedCards([...matchedCards,flippedCards[0],id]);
@@ -57,20 +54,33 @@ export const MemoryGame: React.FC = () => {
         } else {
           if (flippedCards.length === 2) {
             setFlippedCards([id]);
+            console.log("2 cards flipped, clearing ", id, " and ", flippedCards[0]);
+
+              clearTimeout(timeouts[flippedCards[1]]);
+              clearTimeout(timeouts[flippedCards[0]]);
+
+      
           } else {
-            // console.log('flipped < 2, flipped is: ', flippedCards,', adding id:', id)
+            console.log("1 or 0 cards flipped, clearing ", id);
+
+            clearTimeout(timeouts[id]);
+            if (flippedCards.length === 1) {
+              console.log("setting timeout because of flipped", flippedCards, "and ", id);
+              timeouts[id] = setTimeout(() => {
+                setFlippedCards([]);
+              }, 5000);
+            }
             setFlippedCards(prev =>[...prev, id])
-            setTimeout(() => {  
-                console.log('flippeing back using slice 1 on ', flippedCards )
-                setFlippedCards(flippedCards.slice(1));
-            }, 5000);
-          }
-        }
+          }  
+  
+      }
       }
     };
 
     return (
-        <div className="memory-game">
+        // <div className="memory-game">
+        <HStack width="100%" height="100%" justifyContent="center">
+        <SimpleGrid columns={4} spacingX="10px" spacingY={4} maxW="440px">
             {cards.map(card => (
                 <MemoryCard
                     key={card.id}
@@ -80,7 +90,8 @@ export const MemoryGame: React.FC = () => {
                     onClick={() => handleCardClick(card.id)}
                 />
             ))}
-        </div>
+            </SimpleGrid>
+            </HStack>
     );
 };
 

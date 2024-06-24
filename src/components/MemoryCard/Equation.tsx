@@ -13,7 +13,7 @@ export const Equation: React.FC<EquationProps> = ({ equation }) => {
   const numbers = equation.split(` ${operand}`)
 
   return (
-    <VStack alignItems="flex-end">
+    <VStack alignItems="flex-end" className="equation">
       <Text>{numbers[0]}</Text>
       <HStack>
         <Text>{operand === '*' ? 'x ' : operand}</Text>

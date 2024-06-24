@@ -1,7 +1,8 @@
 // src/components/Card.tsx
-import React, { useEffect } from 'react';
+import { Timer } from '../MemoryGame/Timer';
 import './Card.css';
 import { Equation } from './Equation';
+import { Card, Stack, Text } from '@chakra-ui/react';
 
 interface CardProps {
     equation: string;
@@ -11,19 +12,20 @@ interface CardProps {
 }
 
 export const MemoryCard: React.FC<CardProps> = ({ equation, isFlipped, isMatched, onClick }) => {
+    // const timer = new Timer(5000);
     const evaluatedResult = isMatched ? eval(equation).toString() : '';
     return (
-        <div className={`card ${isFlipped ? 'flipped' : ''}`} onClick={onClick}>
-            <div className="card-inner">
-                <div className={`card-front ${isMatched ? 'matched' : ''}`}>
-                    <div className="equation"><Equation equation={equation}/></div>
-                    <div className="evaluated">{evaluatedResult}</div>
-                </div>
+        <Card className={`card ${isFlipped ? 'flipped' : ''}`} onClick={onClick}>
+            <Stack className="card-inner">
+                <Stack className={`card-front ${isMatched ? 'matched' : ''}`}>
+                    <Equation equation={equation}/>
+                    <Text className="evaluated">{evaluatedResult}</Text>
+                </Stack>
                 <div className="card-back">
                     🂠
                 </div>
-            </div>
-        </div>
+            </Stack>
+        </Card>
     );
 };
 
