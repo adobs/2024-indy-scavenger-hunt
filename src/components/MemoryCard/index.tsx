@@ -1,5 +1,4 @@
 // src/components/Card.tsx
-import { Timer } from '../MemoryGame/Timer';
 import './Card.css';
 import { Equation } from './Equation';
 import { Card, Stack, Text } from '@chakra-ui/react';
@@ -12,7 +11,7 @@ interface CardProps {
 }
 
 export const MemoryCard: React.FC<CardProps> = ({ equation, isFlipped, isMatched, onClick }) => {
-    // const timer = new Timer(5000);
+    /*eslint no-eval: "off"*/
     const evaluatedResult = isMatched ? eval(equation).toString() : '';
     return (
         <Card className={`card ${isFlipped ? 'flipped' : ''}`} onClick={onClick}>
