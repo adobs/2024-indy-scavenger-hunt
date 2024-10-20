@@ -1,3 +1,4 @@
+import React from 'react';
 import { Divider, HStack, Text, VStack } from "@chakra-ui/react";
 
 interface EquationProps {
@@ -19,7 +20,6 @@ export const Equation: React.FC<EquationProps> = ({ equation }) => {
         <Text>{operand === '*' ? 'x ' : operand}</Text>
         <Text>{numbers[1]}</Text>
       </HStack>
-      <Divider color="black"/>
     </VStack>
 
   )

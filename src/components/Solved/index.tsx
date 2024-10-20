@@ -1,11 +1,12 @@
+import React from 'react';
 import Fireworks from "./Fireworks"
-import { Instructions } from "./Instructions"
+import { SolvedInstructions } from "./SolvedInstructions"
 
 export const Solved = () => {
   return (
     <>
       <Fireworks />
-      <Instructions/>
+      <SolvedInstructions/>
     </>
   )
 }
